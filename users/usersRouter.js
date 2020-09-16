@@ -13,3 +13,5 @@ router.get("/users", restricted, (req, res) => {
       res.status(500).json({ message: error.message });
     });
 });
+
+module.exports = router
