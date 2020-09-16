@@ -1,18 +1,15 @@
-const db = require("../data/dbConfig");
+const restricted = require("../auth/restrictedMiddleware");
+const router = require("express").Router();
 
-module.exports = {
-  get,
-  add,
-  getBy,
-};
+const Users = require("./users-model");
 
-function get() {
-  return db("users");
-}
-
-function add(user) {
-  return db("users").insert(user);
-}
-function getBy(filter) {
-  return db("users").where(filter).orderBy("id");
-}
+router.get("/users", restricted, (req, res) => {
+  Users.get()
+    .then((users) => {
+      res.status(200).json(users);
+    })
+    .catch((error) => {
+      console.log(error.message);
+      res.status(500).json({ message: error.message });
+    });
+});
